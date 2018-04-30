@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
         String msg = "";
         // JDBC driver name and database URL
         static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; // from within the library folder of the jdbc downloaded.
-        static final String DB_URL = "jdbc:mysql://network-project.mysql.database.azure.com:3306/test?useSSL=true&requireSSL=false";
-        //static final String DB_URL = "jdbc:mysql://" +
-        //        DbStrings.DATABASE_URL + "/" +
-        //        DbStrings.DATABASE_NAME;
+        //static final String DB_URL = "jdbc:mysql://network-project.mysql.database.azure.com:3306/test?useSSL=true&requireSSL=false";
+        static final String DB_URL = "jdbc:mysql://" +
+                DbStrings.DATABASE_URL + "/" +
+                DbStrings.DATABASE_NAME;
 
         // just prints to let the user know what's going on.
         @Override
