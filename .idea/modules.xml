@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MySqlExampleProject.iml" filepath="$PROJECT_DIR$/MySqlExampleProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FagProjektApp.iml" filepath="$PROJECT_DIR$/FagProjektApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mysql-connector-java-5.1.46-bin/mysql-connector-java-5.1.46-bin.iml" filepath="$PROJECT_DIR$/mysql-connector-java-5.1.46-bin/mysql-connector-java-5.1.46-bin.iml" />
     </modules>
