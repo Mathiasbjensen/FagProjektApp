@@ -24,6 +24,7 @@ public class ConnectThread extends Thread {
     private OutputStream mmOutStream;
     private final int REQUEST_READ_PHONE_STATE = 1;
     private final Activity activity;
+
     public ConnectThread(BluetoothDevice device, BluetoothAdapter tempBluetoothAdapter, Activity activity) {
         this.activity = activity;
         BluetoothSocket tmp = null;

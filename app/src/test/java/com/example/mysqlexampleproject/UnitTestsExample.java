@@ -2,6 +2,7 @@ package com.example.mysqlexampleproject;
 
 import org.junit.Test;
 
+
 import static org.junit.Assert.*;
 
 /**
@@ -9,9 +10,13 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class UnitTestsExample {
+
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
+
+
+
 }

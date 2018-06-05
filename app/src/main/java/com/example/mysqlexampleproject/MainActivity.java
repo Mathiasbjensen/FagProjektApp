@@ -1,5 +1,6 @@
 package com.example.mysqlexampleproject;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -36,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     // LinkedHashMap is always stored in the same order, could use w/e i guess?
     Map<String, Double> personMap =
             new LinkedHashMap<>();
-    private Bluetooth bluetooth;
+    private final Bluetooth bluetooth = new Bluetooth(thisContext);
     private BroadcastReceiver mReceiver;
     Map<String, DevicePair> bluetoothDiscoveredMap = new LinkedHashMap<>();
     Map<String, DevicePair> bluetoothPairedMap = new LinkedHashMap<>();
+    private ConnectThread connecting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +67,25 @@ public class MainActivity extends AppCompatActivity {
         
 
     }
+    public void connectToUnit(BluetoothDevice device, Activity activity) {
+        connecting = new ConnectThread(device, bluetooth.getBluetoothAdapter(), activity);
+        connecting.start();
+    }
+
+    public void discoverDevices(Activity activity) {
+        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+        ActivityCompat.requestPermissions(activity,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+        if (bluetooth.getBluetoothAdapter().isDiscovering()) {bluetooth.getBluetoothAdapter().cancelDiscovery();}
+        bluetooth.getBluetoothAdapter().startDiscovery();
+    }
 
     private void changeContentMainMenu() {
         setContentView(R.layout.main_menu);
-        Button goToGet = (Button) findViewById(R.id.goToGetData);
-        Button goToBlue = (Button) findViewById(R.id.goToBluetooth);
-        Button goToChange = (Button) findViewById(R.id.goToChangeData);
+        Button goToGet = findViewById(R.id.goToGetData);
+        Button goToBlue = findViewById(R.id.goToBluetooth);
+        Button goToChange = findViewById(R.id.goToChangeData);
 
 
         goToGet.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.bluetooth = new Bluetooth();
         this.mReceiver = bluetooth.mReceiver;
         registerReceiver(mReceiver, filter);
-        bluetooth.discoverDevices(this);
+        discoverDevices(this);
 
         Button btnBluetooth = findViewById(R.id.FindBluetooth);
         btnBluetooth.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Object device = adapterView.getItemAtPosition(position);
-                bluetooth.connectToUnit((BluetoothDevice) device, (Activity) thisContext);
+                connectToUnit((BluetoothDevice) device, (Activity) thisContext);
             }
 
         });
@@ -155,11 +170,15 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         if (bluetooth != null) {
-            bluetooth.unregisterReceiver(mReceiver);
-            if (bluetooth.connecting != null) {
-                bluetooth.connecting.cancel();
+            unregisterReceiver(mReceiver);
+            if (connecting != null) {
+                connecting.cancel();
             }
         }
+    }
+
+    public Bluetooth getBluetooth() {
+        return bluetooth;
     }
 
     private class GetBluetoothDevices extends AsyncTask<String, String, String> {

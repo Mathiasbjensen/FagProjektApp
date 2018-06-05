@@ -28,65 +28,49 @@ import static android.support.v4.app.ActivityCompat.startActivityForResult;
  * Created by Frede on 31-05-2018.
  */
 
-public class Bluetooth extends Activity {
+public class Bluetooth {
 
-    public BluetoothAdapter mBluetoothAdapter;
+    private static BluetoothAdapter mBluetoothAdapter;
     private final static int REQUEST_ENABLE_BT = 1;
     public List<BluetoothDevice> discoveredDevices = new ArrayList<>();
     public List<BluetoothDevice> pairedDevicesList = new ArrayList<>();
-    public ConnectThread connecting;
+    private Context thisContext;
 
-    public Bluetooth() {
-        BluetoothAdapter mBluetoothAdapter = verifyBluetoothSupport();
-        if (mBluetoothAdapter != null) {
-            enableBluetooth(mBluetoothAdapter);
+    public Bluetooth(Context context) {
+        thisContext = context;
+        setBluetoothAdapter(BluetoothAdapter.getDefaultAdapter());
+        if (checkBluetoothAvailability()) {
+            enableBluetooth();
         }
     }
 
-        private BluetoothAdapter verifyBluetoothSupport() {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    public Boolean checkBluetoothAvailability() {
+        return (mBluetoothAdapter != null);
+    }
+
+    public BluetoothAdapter getBluetoothAdapter() {
         return mBluetoothAdapter;
     }
 
-    private void enableBluetooth(BluetoothAdapter mBluetoothAdapter) {
+    public void setBluetoothAdapter(BluetoothAdapter settingBluetoothAdapter) {
+        mBluetoothAdapter = settingBluetoothAdapter;
+    }
+
+    public void enableBluetooth() {
         if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(mBluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-    }
-
-    public void pairedDevices() {
-        pairedDevicesList.clear();
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-
-        if (pairedDevices.size() > 0) {
-            // There are paired devices. Get the name and address of each paired device.
-            for (BluetoothDevice device : pairedDevices) {
-                pairedDevicesList.add(device);
+            if(thisContext instanceof MainActivity){
+                Intent enableBtIntent = new Intent(mBluetoothAdapter.ACTION_REQUEST_ENABLE);
+                ((MainActivity)thisContext).startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
+
         }
     }
 
-    public void discoverDevices(Activity activity) {
-        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
-        ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-        if (mBluetoothAdapter.isDiscovering()) {mBluetoothAdapter.cancelDiscovery();}
-        mBluetoothAdapter.startDiscovery();
-        }
-
-    private void enableDiscoverOfApp() {
-        Intent discoverableIntent =
-                new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-        startActivity(discoverableIntent);
+    public Boolean isBluetoothEnabled() {
+        return mBluetoothAdapter.isEnabled();
     }
 
-    public void connectToUnit(BluetoothDevice device, Activity activity) {
-        connecting = new ConnectThread(device, mBluetoothAdapter, activity);
-        connecting.start();
-    }
+
 
     //Laver en receiver, skal være der for at kunne discover devices
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
