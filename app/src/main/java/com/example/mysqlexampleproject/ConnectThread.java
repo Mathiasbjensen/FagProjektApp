@@ -16,20 +16,21 @@ import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
 
-public class ConnectThread extends Thread {
+public class ConnectThread {
     private BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothAdapter mBluetoothAdapter;
     private OutputStream mmOutStream;
     private final int REQUEST_READ_PHONE_STATE = 1;
-    private final Activity activity;
+    private Boolean deviceConnection;
+    private BluetoothDevice connectedDevice;
 
-    public ConnectThread(BluetoothDevice device, BluetoothAdapter tempBluetoothAdapter, Activity activity) {
-        this.activity = activity;
+    public ConnectThread(BluetoothDevice device, BluetoothAdapter tempBluetoothAdapter) {
         BluetoothSocket tmp = null;
         mmDevice = device;
         mBluetoothAdapter = tempBluetoothAdapter;
+        deviceConnection = false;
         try {
             tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException e) {
@@ -40,8 +41,7 @@ public class ConnectThread extends Thread {
 
     }
 
-    public void run() {
-
+    public void initiateConnection(Activity activity) {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -51,7 +51,10 @@ public class ConnectThread extends Thread {
         }
 
         connectSocket();
+    }
 
+    public BluetoothDevice getDevice() {
+        return mmDevice;
     }
 
 
@@ -59,7 +62,7 @@ public class ConnectThread extends Thread {
         byte[] b = stringToSend.getBytes();
         try {
             mmOutStream.write(b);
-            Log.e(TAG, "Sending Succesfull. Sending: "+stringToSend);
+            Log.e(TAG, "Sending Successful. Sending: "+stringToSend);
         } catch (IOException e) {
             Log.e(TAG, "Error occurred when sending data", e);
 
@@ -73,6 +76,8 @@ public class ConnectThread extends Thread {
         try {
 
             mmSocket.connect();
+            setConnectedDevice(mmDevice);
+            deviceConnection = true;
             Log.e("ConnectHC05Status", "Connected1");
 
             } catch (IOException connectException) {
@@ -109,6 +114,18 @@ public class ConnectThread extends Thread {
         } catch (IOException e) {
             Log.e(TAG, "Could not close the client socket", e);
         }
+    }
+
+    public Boolean isDeviceConnected() {
+        return deviceConnection;
+    }
+
+    public BluetoothDevice getConnectedDevice() {
+        return connectedDevice;
+    }
+
+    public void setConnectedDevice(BluetoothDevice device) {
+        this.connectedDevice = device;
     }
 
 }

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.mysqlexampleproject.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,20 +17,21 @@ import java.util.Map;
  * Created by Mathi on 24-04-2018.
  */
 
-public class ItemAdapter extends BaseAdapter {
+public class ItemStatisticsAdapter extends BaseAdapter {
 
     LayoutInflater mInflator;
-    Map<String, String> map;
-    List<String> names;
-    List<String> ages;
+    Map<String, AveragePair> map;
+    List<String> variables;
+    List<AveragePair> avgPair;
 
     // Constructor, context = which screen opens it op. Map is essentially a dictionary.
-    public ItemAdapter(Context c,Map m){
+    public ItemStatisticsAdapter(Context c,Map m){
         mInflator = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         map = m;
-        names = new ArrayList<String>(map.keySet());
-        ages = new ArrayList<String>(map.values());
+        variables = new ArrayList<String>(map.keySet());
+        avgPair = new ArrayList<AveragePair>(map.values());
     }
+
     // Implemented methods from the ItemAdapter class.
     @Override
     public int getCount() {
@@ -37,7 +40,7 @@ public class ItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return names.get(position);
+        return variables.get(position);
     }
 
     @Override
@@ -47,13 +50,15 @@ public class ItemAdapter extends BaseAdapter {
     // How the information should be presented.
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = mInflator.inflate(R.layout.item_layout, null);
+        View v = mInflator.inflate(R.layout.listrow, null);
         // find each textvies
-        TextView nameTextView = (TextView) v.findViewById(R.id.nameTextView);
-        TextView ageTextView = (TextView) v.findViewById(R.id.ageTextView);
+        TextView column1 = (TextView) v.findViewById(R.id.column1);
+        TextView column2 = (TextView) v.findViewById(R.id.column2);
+        TextView column3 = (TextView) v.findViewById(R.id.column3);
         // set values of names and ages referring to the lists.
-        nameTextView.setText(names.get(position));
-        ageTextView.setText(ages.get(position));
+        column1.setText(variables.get(position));
+        column2.setText((avgPair.get(position).getAvg()) + "");
+        column3.setText((avgPair.get(position).getCurrent()) + "");
 
         return v;
     }
