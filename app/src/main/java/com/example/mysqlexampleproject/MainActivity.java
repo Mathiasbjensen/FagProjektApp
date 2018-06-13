@@ -411,6 +411,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button goToMainMenu = findViewById(R.id.mainMenuButton);
+        goToMainMenu.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                changeContentMainMenu();
+            }
+        });
+
+        Button goToStat = findViewById(R.id.statButton);
+        goToStat.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                changeContentSeeStat();
+            }
+        });
+
+        Button goToCurrent = findViewById(R.id.getDataButton);
+        goToCurrent.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                changeContentGetData();
+            }
+        });
+
     }
 
 
@@ -530,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 rs.close();
 
-                sql = "SELECT * FROM BitErrorRate";
+                sql = "SELECT * FROM BitErrorRate ORDER BY timestmp";
                 rs = stmt.executeQuery(sql);
                 double x = 0;
                 rs.last();
@@ -545,7 +569,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 rs.close();
 
-                sql = "SELECT * FROM FPS";
+                sql = "SELECT * FROM FPS ORDER BY timestmp";
                 rs = stmt.executeQuery(sql);
                 x = 0;
                 rs.last();
@@ -561,7 +585,7 @@ public class MainActivity extends AppCompatActivity {
                 rs.close();
 
 
-                sql = "SELECT * FROM FrameUtilizationValue";
+                sql = "SELECT * FROM Utilization ORDER BY timestmp";
                 rs = stmt.executeQuery(sql);
                 x = 0;
                 rs.last();
