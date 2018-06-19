@@ -31,6 +31,7 @@ public class passwordPopUp extends Activity {
         super.onDestroy();
     }
 
+    //Activity is started at the start of the app. Doesn't go away until a proper password is put in.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class passwordPopUp extends Activity {
 
     }
 
+    //test wether or not the password is accepted and closes activity
     private class TestPassword extends AsyncTask<String, String, String> {
 
         // JDBC driver name and database URL

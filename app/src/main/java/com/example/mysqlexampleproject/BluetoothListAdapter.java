@@ -21,7 +21,8 @@ public class BluetoothListAdapter extends BaseAdapter {
     List<String> names;
     List<DevicePair> devices;
 
-    // Constructor, context = which screen opens it op. Map is essentially a dictionary.
+    //Initialises an adapter which contains the devices and wether they are paired, connected or discovered.
+    // This is put in a ListViewer.
     public BluetoothListAdapter(Context c,Map m){
         mInflator = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         map = m;
@@ -43,7 +44,6 @@ public class BluetoothListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    // How the information should be presented.
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = mInflator.inflate(R.layout.bluetooth_item_layout, null);

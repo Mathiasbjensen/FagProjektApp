@@ -38,6 +38,7 @@ public class Bluetooth implements Serializable {
     private static ConnectThread connecting;
 
     public Bluetooth() {
+        //Initialises the BluetoothAdapter of the device
         setBluetoothAdapter(BluetoothAdapter.getDefaultAdapter());
     }
 
@@ -50,7 +51,7 @@ public class Bluetooth implements Serializable {
 
         }
     }
-
+    //Initialises the discovery of devices for an activity.
     public void discoverDevices(Activity activity) {
         int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
         ActivityCompat.requestPermissions(activity,
@@ -61,7 +62,7 @@ public class Bluetooth implements Serializable {
     }
 
 
-
+    //Connects to a BluetoothDevice and initiatesConnection in a activity
     public void connectToUnit(BluetoothDevice device, Activity activity) {
         setConnecting(new ConnectThread(device, getBluetoothAdapter()));
         connecting.initiateConnection(activity);
@@ -71,14 +72,11 @@ public class Bluetooth implements Serializable {
         return getBluetoothAdapter().isDiscovering();
     }
 
-
-
-
-
     public static Boolean isBluetoothEnabled() {
         return mBluetoothAdapter.isEnabled();
     }
 
+    //Returns the ConnectThread object, which will be null if no device is connected.
     public ConnectThread getConnecting() {
         return connecting;
     }
@@ -87,8 +85,7 @@ public class Bluetooth implements Serializable {
         this.connecting = connecting;
     }
 
-
-
+    //Checks wether or not a device has access to bluetooth
     public static Boolean checkBluetoothAvailability() {
         return (mBluetoothAdapter != null);
     }

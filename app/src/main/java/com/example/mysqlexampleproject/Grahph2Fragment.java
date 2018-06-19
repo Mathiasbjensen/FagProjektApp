@@ -21,10 +21,12 @@ public class Grahph2Fragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.graphs2, container,false);
         LineGraphSeries<DataPoint> UTIGraphSeries = new LineGraphSeries<DataPoint>();
         List<DataPoint> UTIseries = (List<DataPoint>) getArguments().getSerializable("UTISeries");
+        //appends all the data to a LineGraphSeries so it can be shown
         for (DataPoint data : UTIseries) {
             UTIGraphSeries.appendData(data, true, UTIseries.size());
         }
         GraphView graph = (GraphView) view.findViewById(R.id.graph1);
+        //Shows graph
         graph.addSeries(UTIGraphSeries);
         
         return view;

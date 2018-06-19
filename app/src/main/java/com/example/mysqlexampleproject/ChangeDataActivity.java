@@ -36,6 +36,7 @@ public class ChangeDataActivity extends Activity {
     String password;
     Bluetooth bluetooth = new Bluetooth();
 
+    //Initiates the activity and gets the password sent from MainActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class ChangeDataActivity extends Activity {
 
     }
 
+    //Initiates the UI, buttons, drop downs, TextViews and other things in the ui
     public void changeContentChangeData() {
         setContentView(R.layout.change_data2);
         final Spinner pamDropDown = findViewById(R.id.pamDropDown);
@@ -67,7 +69,7 @@ public class ChangeDataActivity extends Activity {
         ArrayAdapter<String> pamAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, pamItems);
         pamDropDown.setAdapter(pamAdapter);
 
-        String[] RESItems = new String[]{"480", "720", "1080"};
+        String[] RESItems = new String[]{"144", "480", "720", "1080"};
         ArrayAdapter<String> RESAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, RESItems);
         RESDropDown.setAdapter(RESAdapter);
 
@@ -75,6 +77,7 @@ public class ChangeDataActivity extends Activity {
         sendDataPam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Sends changes to the arduino when pressing button
                 String[] split = pamDropDown.getSelectedItem().toString().split(" ");
                 bluetooth.getConnecting().write(password+"-{MOD:"+split[0]+"}");
 
@@ -100,7 +103,7 @@ public class ChangeDataActivity extends Activity {
         sendDataVCL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Sends changes to the arduino when pressing button and checking whether its a valid input
                 String temp = VCLEdit.getText().toString();
                 try {
                     Double tempInt = Double.parseDouble(temp);
@@ -121,6 +124,7 @@ public class ChangeDataActivity extends Activity {
         sendDataRES.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Sends changes to the arduino when pressing button
                 bluetooth.getConnecting().write(password+"-{RES:"+RESDropDown.getSelectedItem().toString()+"}");
             }
         });
@@ -129,7 +133,7 @@ public class ChangeDataActivity extends Activity {
         sendDataFPS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Sends changes to the arduino when pressing button and checking whether its a valid input
                 String temp = FPSEdit.getText().toString();
                 try {
                     Double tempInt = Double.parseDouble(temp);
@@ -149,6 +153,7 @@ public class ChangeDataActivity extends Activity {
         backButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                //Returns to mainactivity and ends this activity when pressing backbutton.
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
@@ -159,18 +164,16 @@ public class ChangeDataActivity extends Activity {
 
     }
 
-
+    //Gets data from the database and displays it. Almost the same class is used and explained in greater details in getDataActivity
     private class GetCurrentData extends AsyncTask<String, String, String> {
 
         String msg = "";
-        // JDBC driver name and database URL
-        static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; // from within the library folder of the jdbc downloaded.
-        //static final String DB_URL = "jdbc:mysql://network-project.mysql.database.azure.com:3306/test?useSSL=true&requireSSL=false";
+
+        static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         static final String DB_URL = "jdbc:mysql://" +
                 DbStrings.DATABASE_URL + "/" +
                 DbStrings.DATABASE_NAME;
 
-        // just prints to let the user know what's going on.
 
         @Override
         protected String doInBackground(String... strings) {
@@ -192,14 +195,12 @@ public class ChangeDataActivity extends Activity {
                         this.publishProgress(value, string);
                     }
                     rs.close();
-                    //double age = rs.getDouble("timestmp");
                 }
 
 
 
                 msg = "Process complete.";
 
-                // Closing the open resources, no idea why.
                 stmt.close();
                 conn.close();
 

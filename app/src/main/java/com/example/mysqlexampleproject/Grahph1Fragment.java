@@ -25,10 +25,12 @@ public class Grahph1Fragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.graphs, container,false);
         LineGraphSeries<DataPoint> BERGraphSeries = new LineGraphSeries<DataPoint>();
         List<DataPoint> BERseries = (List<DataPoint>) getArguments().getSerializable("BERSeries");
+        //appends all the data to a LineGraphSeries so it can be shown
         for (DataPoint data : BERseries) {
             BERGraphSeries.appendData(data, true, BERseries.size());
         }
         GraphView graph = (GraphView) view.findViewById(R.id.graph1);
+        //Shows graph
         graph.addSeries(BERGraphSeries);
 
         return view;

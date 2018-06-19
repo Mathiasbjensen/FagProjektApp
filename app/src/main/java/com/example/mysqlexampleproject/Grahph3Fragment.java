@@ -21,10 +21,12 @@ public class Grahph3Fragment extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.graphs3, container,false);
         LineGraphSeries<DataPoint> FPSGraphSeries = new LineGraphSeries<DataPoint>();
         List<DataPoint> FPSseries = (List<DataPoint>) getArguments().getSerializable("FPSSeries");
+        //appends all the data to a LineGraphSeries so it can be shown
         for (DataPoint data : FPSseries) {
             FPSGraphSeries.appendData(data, true, FPSseries.size());
         }
         GraphView graph = (GraphView) view.findViewById(R.id.graph1);
+        //shows graph
         graph.addSeries(FPSGraphSeries);
         
         return view;

@@ -25,11 +25,13 @@ public class ConnectThread {
     private BluetoothDevice tempDevice;
     private BluetoothDevice connectedDevice;
 
+    //Initialises a connection with a BluetoothDevice and the local devices BluetoothAdapter
     public ConnectThread(BluetoothDevice device, BluetoothAdapter tempBluetoothAdapter) {
         BluetoothSocket tmp = null;
         tempDevice = device;
         mBluetoothAdapter = tempBluetoothAdapter;
         try {
+            //Creates socket with hardcoded UUID to the HC05. Same UUID used on the server side
             tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException e) {
             Log.e(TAG, "Failed to create Socket", e);
@@ -38,6 +40,7 @@ public class ConnectThread {
         mmSocket = tmp;
     }
 
+    //Initiate connection with device by asking for permission
     public void initiateConnection(Activity activity) {
         int permissionCheck = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE);
 
@@ -62,8 +65,8 @@ public class ConnectThread {
         }
     }
 
-    // Closes the client socket and causes the thread to finish.
 
+    //connects to the soccet and cancels discovery of other devices.
     private void connectSocket() {
         mBluetoothAdapter.cancelDiscovery();
         try {
@@ -89,6 +92,7 @@ public class ConnectThread {
             initialiseOutputStream(mmSocket);
     }
 
+    //Initialises and Outputstream which the app can send data through
     public void initialiseOutputStream(BluetoothSocket socket) {
 
         OutputStream tmpOut = null;
@@ -102,6 +106,7 @@ public class ConnectThread {
         mmOutStream = tmpOut;
     }
 
+    //Closes the socket
     public void cancel() {
         try {
             mmSocket.close();

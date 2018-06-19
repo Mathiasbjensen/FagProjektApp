@@ -22,7 +22,7 @@ public class ItemAdapter extends BaseAdapter {
     List<String> names;
     List<String> ages;
 
-    // Constructor, context = which screen opens it op. Map is essentially a dictionary.
+    //Initialises an adapter which contains information from the database. This is put in a ListViewer.
     public ItemAdapter(Context c,Map m){
         mInflator = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         map = m;
@@ -44,7 +44,7 @@ public class ItemAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    // How the information should be presented.
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = mInflator.inflate(R.layout.item_layout, null);

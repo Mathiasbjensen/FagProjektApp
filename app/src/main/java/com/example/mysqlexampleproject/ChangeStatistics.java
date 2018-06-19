@@ -163,13 +163,11 @@ public class ChangeStatistics extends Activity {
     }
 
 
+    //Gets data from the database and displays it. Almost the same class is used and explained in greater details in getDataActivity
 
     private class GetData extends AsyncTask<String, String, String> {
 
-        String msg = "";
-        // JDBC driver name and database URL
-        static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; // from within the library folder of the jdbc downloaded.
-        //static final String DB_URL = "jdbc:mysql://network-project.mysql.database.azure.com:3306/test?useSSL=true&requireSSL=false";
+        static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         static final String DB_URL = "jdbc:mysql://" +
                 DbStrings.DATABASE_URL + "/" +
                 DbStrings.DATABASE_NAME;
@@ -178,7 +176,6 @@ public class ChangeStatistics extends Activity {
         public GetData(int hours) {
             this.hours = hours;
         }
-        // just prints to let the user know what's going on.
 
         @Override
         protected String doInBackground(String... strings) {
@@ -186,7 +183,7 @@ public class ChangeStatistics extends Activity {
             averageMap.clear();
             Connection conn = null;
             Statement stmt = null;
-            String[] databasequery = {"PAM","BER", "ERR", "SYN", "UTI", "VCL", "FPS", "RES"};
+            String[] databasequery = {"PAM","BER", "ERR", "SYN", "UTI", "VCL", "FPS", "RES", "JIT", "PLT", "PDT"};
             String[] avgDatabaseQuery = {"BER", "UTI", "FPS"};
             String[] mostUsedDatabaseQuery = {"VCL", "RES", "PAM"};
             try {
@@ -205,14 +202,8 @@ public class ChangeStatistics extends Activity {
                     }
                 }
                 rs.close();
-
-                    //double age = rs.getDouble("timestmp");
-
-
-
                 sql = "Call AVGValues("+hours+");";
                 rs = stmt.executeQuery(sql);
-
 
                 while(rs.next()) {
                     int i = 1;
@@ -248,22 +239,12 @@ public class ChangeStatistics extends Activity {
                 rs.close();
 
 
-
-
-                //double age = rs.getDouble("timestmp");
-
-                msg = "Data fetched.";
-
-                // Closing the open resources, no idea why.
-
                 stmt.close();
                 conn.close();
 
             } catch (SQLException connError) {
-                msg = "An exception was thrown for JDBC.";
                 connError.printStackTrace();;
             } catch (ClassNotFoundException e) {
-                msg = "A class not found exception was thrown";
                 e.printStackTrace();
             } finally {
 

@@ -34,7 +34,7 @@ public class FindBluetoothActivity extends Activity {
     private List<BluetoothDevice> discoveredDevices = new ArrayList<>();
     private List<BluetoothDevice> pairedDevicesList = new ArrayList<>();
 
-    //Laver en receiver, skal være der for at kunne discover devices
+    //Laver en receiver, skal være der for at kunne discover devices. Opfanger devices.
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -50,6 +50,7 @@ public class FindBluetoothActivity extends Activity {
             }
         }
     };
+    //Starts activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class FindBluetoothActivity extends Activity {
         changeContentGetBluetooth();
     }
 
+    //initialises UI and button listeners
     public void changeContentGetBluetooth() {
         setContentView(R.layout.activity_connect_to_bluetooth);
         bluetoothListView = findViewById(R.id.DeviceListView);
@@ -83,8 +85,10 @@ public class FindBluetoothActivity extends Activity {
         bluetoothListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //Connects to bluetooth device when pressing a device in the list of discovered devices
                 bluetoothTextView.setText("Initiating connection");
                 Object device = adapterView.getItemAtPosition(position);
+                //Only initialises connection if not already connected
                 if (bluetooth.getConnecting() == null) {
                     bluetooth.connectToUnit((BluetoothDevice) device, thisActivity);
                     updatePairedList();
@@ -101,6 +105,7 @@ public class FindBluetoothActivity extends Activity {
 
         });
 
+        //End activity.
         Button backButton = findViewById(R.id.getBack);
         backButton.setOnClickListener(new View.OnClickListener() {
 
@@ -138,6 +143,7 @@ public class FindBluetoothActivity extends Activity {
 
     protected void onDestroy() {
         super.onDestroy();
+        //Unregister reciever when activity is destroyed
         if(recieverRegistered) {
             unregisterReceiver(mReceiver);
         }
@@ -151,6 +157,7 @@ public class FindBluetoothActivity extends Activity {
         return pairedDevicesList;
     }
 
+    //Updates a map to have all the devices currently discovered, paired and connected to
     public Map<String, DevicePair> updateMap(Map map) {
         updatePairedList();
         for (BluetoothDevice device : getPairedDevicesList()) {

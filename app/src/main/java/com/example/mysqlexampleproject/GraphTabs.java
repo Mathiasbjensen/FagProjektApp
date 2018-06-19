@@ -36,6 +36,7 @@ public class GraphTabs extends FragmentActivity {
     private Grahph3Fragment graph3;
 
     @Override
+    //Activity that holds the graph fragments
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_tabs);
@@ -47,10 +48,11 @@ public class GraphTabs extends FragmentActivity {
         graph3 = new Grahph3Fragment();
         graph3.setArguments(bundle);
 
-        // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager with the sections adapter. This makes sure the app can slide between graphs
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
+        //Set up the tabs to navigate through the graphs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -70,6 +72,7 @@ public class GraphTabs extends FragmentActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
+    //Class to add fragment to the ViewPager
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.example.mysqlexampleproject;
 
 import java.io.Serializable;
-
+// An object that is used when the average data in lists.
 public class AveragePair implements Serializable{
 
     private final double avg;

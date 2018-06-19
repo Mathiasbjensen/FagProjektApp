@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 
     }
 
-
+    //initialises UI and button listeners
     public void changeContentMainMenu() {
         setContentView(R.layout.main_menu);
         Button goToGet = findViewById(R.id.goToGetData);
@@ -100,6 +100,7 @@ public class MainActivity extends Activity {
 
         if (requestCode == 4) {
                 Log.e("Password initialised", "Password is initialised as: "+ data.getStringExtra("Password"));
+                //saves the password put in in passwordPopUp if it's accepted
                 if(resultCode == Activity.RESULT_OK){
                     password = (String) data.getStringExtra("Password");
                 }

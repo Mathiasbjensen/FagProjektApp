@@ -8,6 +8,7 @@ public class DevicePair {
 
     private final String status;
 
+    //And object that contains a Bluetooth device and a string saying whether it is connected, paired or discovered
     public DevicePair(BluetoothDevice device, String status) {
         this.device = device;
         this.status = status;

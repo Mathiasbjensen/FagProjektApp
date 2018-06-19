@@ -56,6 +56,7 @@ public class getDataActivity extends Activity {
         this.password = string;
     }
 
+    //Initialises UI and buttons listeners
     public void changeContentGetData() {
         setContentView(R.layout.activity_main);
         // When main activity is loaded we give som starting values:
@@ -68,7 +69,6 @@ public class getDataActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                initiateGetData();
             }
         });
@@ -77,16 +77,18 @@ public class getDataActivity extends Activity {
         backButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                //Destroys activity and goes back to main
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }
         });
 
-        Button statisticsButton = findViewByid(R.id.statisticsButton);
+        Button statisticsButton = findViewById(R.id.statisticsButton);
         statisticsButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                //Makes sure to send all necessary data to the ChangeStatistics activity and starting it
                 Intent intent = new Intent(thisActivity, ChangeStatistics.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("BERSeries", BERseries);
@@ -113,7 +115,7 @@ public class getDataActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        //Looks for when the ChangeStatistics activity is done, and whether it wants to go back to main activity or not.
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_CANCELED) {
                 finish();
@@ -138,6 +140,7 @@ public class getDataActivity extends Activity {
             this.method = method;
         }
 
+        //Update the TextView that gives an update
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
@@ -149,15 +152,20 @@ public class getDataActivity extends Activity {
             publishProgress("Connecting to database...");
             Connection conn = null;
             Statement stmt = null;
-            String[] databasequery = {"PAM","BER", "ERR", "SYN", "UTI", "VCL", "FPS", "RES"};
+            //Arrays of the tables we are getting, sorted in the way we receive them.
+            String[] databasequery = {"PAM","BER", "ERR", "SYN", "UTI", "VCL", "FPS", "RES", "JIT", "PLT", "PDT"};
             String[] avgDatabaseQuery = {"BER", "UTI", "FPS"};
             String[] mostUsedDatabaseQuery = {"VCL", "RES", "PAM"};
             try {
+                //Initialises connection to the database
                 Class.forName(JDBC_DRIVER);
                 conn = DriverManager.getConnection(DB_URL, DbStrings.USERNAME, password);
+                //Updates the user that a connection is established and now fetchin data.
                 publishProgress("Fetching data...");
 
                 stmt = conn.createStatement();
+                //Calls the GetCurrentValues procedure in the database which returns a ResultSet.
+                // This is then iterated through and put in to a map that will be displayed in the UI
                 String sql = "CALL GetCurrentValues()";
                 ResultSet rs = stmt.executeQuery(sql);
                 while(rs.next()) {
@@ -171,9 +179,7 @@ public class getDataActivity extends Activity {
                 }
                 rs.close();
 
-                    //double age = rs.getDouble("timestmp");
-
-
+                //Gets the average values for the last x hours. This is done to have data when moving on
                 sql = "Call AVGValues("+hours+");";
                 rs = stmt.executeQuery(sql);
 
@@ -188,9 +194,10 @@ public class getDataActivity extends Activity {
                 }
                 rs.close();
 
-                sql = "Call MostUsedVar("+168+");";
+                //Gets the most used values for the last x hours. This is done to have data when moving on
+                sql = "Call MostUsedVar("+hours+");";
                 rs = stmt.executeQuery(sql);
-
+                //If there are no most used values for the given time, insert -1.0 instead
                 if (!rs.isBeforeFirst()) {
                     for (String string : mostUsedDatabaseQuery) {
                         Log.e("Most used var: ", "" + null);
@@ -210,6 +217,7 @@ public class getDataActivity extends Activity {
                 }
                 rs.close();
 
+                //gets data for the graphs
                 sql = "SELECT * FROM BitErrorRate ORDER BY timestmp LIMIT 100";
                 rs = stmt.executeQuery(sql);
                 double x = 0;
@@ -224,6 +232,7 @@ public class getDataActivity extends Activity {
                 }
                 rs.close();
 
+                //gets data for the graphs
                 sql = "SELECT * FROM FPS ORDER BY timestmp LIMIT 100";
                 rs = stmt.executeQuery(sql);
                 x = 0;
@@ -238,7 +247,7 @@ public class getDataActivity extends Activity {
                 }
                 rs.close();
 
-
+                //gets data for the graphs
                 sql = "SELECT * FROM Utilization ORDER BY timestmp LIMIT 100";
                 rs = stmt.executeQuery(sql);
                 x = 0;
@@ -291,13 +300,13 @@ public class getDataActivity extends Activity {
 
         @Override
         protected void onPostExecute(String msg) {
+                //displays the current data for the user
                 progressTextView.setText(this.msg);
 
                 if (personMap.size() > 0) {
 
                     itemAdapter = new ItemAdapter(thisContext, personMap);
                     myListView.setAdapter(itemAdapter);
-                    Log.e("test", myListView.getAdapter()+"");
                 }
         }
 
