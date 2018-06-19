@@ -19,13 +19,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustPan">
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ChangeDataActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".FindBluetoothActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".getDataActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ChangeStatistics"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".GraphTabs"
+            android:label="@string/title_activity_graph_tabs"
+            android:theme="@style/graphTheme" />
+        <activity
+            android:name=".passwordPopUp"
+            android:theme="@style/AppTheme.PopMe"/>
     </application>
 
 </manifest>

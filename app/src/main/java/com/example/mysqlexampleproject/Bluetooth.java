@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,14 +31,11 @@ import static android.support.v4.app.ActivityCompat.startActivityForResult;
  * Created by Frede on 31-05-2018.
  */
 
-public class Bluetooth {
+public class Bluetooth implements Serializable {
 
     private static BluetoothAdapter mBluetoothAdapter;
     private final static int REQUEST_ENABLE_BT = 1;
-    private List<BluetoothDevice> discoveredDevices = new ArrayList<>();
-    private List<BluetoothDevice> pairedDevicesList = new ArrayList<>();
     private static ConnectThread connecting;
-
 
     public Bluetooth() {
         setBluetoothAdapter(BluetoothAdapter.getDefaultAdapter());
@@ -62,17 +60,11 @@ public class Bluetooth {
         getBluetoothAdapter().startDiscovery();
     }
 
-    public void updatePairedList() {
-        pairedDevicesList = new ArrayList<>(getBluetoothAdapter().getBondedDevices());
-        for (BluetoothDevice device : pairedDevicesList) {
-            removeDiscoveredDeviceList(device);
-        }
-    }
+
 
     public void connectToUnit(BluetoothDevice device, Activity activity) {
         setConnecting(new ConnectThread(device, getBluetoothAdapter()));
         connecting.initiateConnection(activity);
-        updatePairedList();
     }
 
     public Boolean isBluetoothAdapterDiscovering() {
@@ -80,35 +72,8 @@ public class Bluetooth {
     }
 
 
-    public List<BluetoothDevice> getDiscoveredDevices() {
-        return discoveredDevices;
-    }
-
-    public List<BluetoothDevice> getPairedDevicesList() {
-        return pairedDevicesList;
-    }
-
-    public Map<String, DevicePair> updateMap(Map map) {
 
 
-        for (BluetoothDevice device : pairedDevicesList) {
-            Log.e("Connection status", ""+connecting.getConnectedDevice()+" : "+device);
-            if (connecting != null && connecting.getConnectedDevice().equals(device)) {
-               // if (map.containsKey(connecting.getConnectedDevice().getName())) { map.remove(connecting.getConnectedDevice().getName());}
-                Log.e("DeviceStatus", "Device connected");
-                map.put(device.getName(), new DevicePair(device, "Connected"));
-            } else {
-                Log.e("DeviceStatus","Device paired");
-                map.put(device.getName(), new DevicePair(device, "Paired"));
-            }
-
-        }
-        for (BluetoothDevice device : discoveredDevices) {
-                map.put(device.getName(), new DevicePair(device, ""));
-        }
-        Log.e("Updated map", "Discovered: "+discoveredDevices + "Paired: "+pairedDevicesList );
-        return map;
-    }
 
     public static Boolean isBluetoothEnabled() {
         return mBluetoothAdapter.isEnabled();
@@ -122,21 +87,7 @@ public class Bluetooth {
         this.connecting = connecting;
     }
 
-    public void addDiscoveredDeviceList(BluetoothDevice device) {
-        discoveredDevices.add(device);
-    }
 
-    public void removeDiscoveredDeviceList(BluetoothDevice device) {
-        discoveredDevices.remove(device);
-    }
-
-    public void updatePairedDeviceList(BluetoothDevice device) {
-        pairedDevicesList.add(device);
-    }
-
-    public void clearDiscoveredDeviceList() {
-        discoveredDevices.clear();
-    }
 
     public static Boolean checkBluetoothAvailability() {
         return (mBluetoothAdapter != null);
@@ -149,7 +100,5 @@ public class Bluetooth {
     public void setBluetoothAdapter(BluetoothAdapter settingBluetoothAdapter) {
         this.mBluetoothAdapter = settingBluetoothAdapter;
     }
-
-
 
 }

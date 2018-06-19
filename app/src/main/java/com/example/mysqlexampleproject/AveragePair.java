@@ -1,9 +1,11 @@
 package com.example.mysqlexampleproject;
 
-public class AveragePair {
+import java.io.Serializable;
+
+public class AveragePair implements Serializable{
 
     private final double avg;
-    private final double current;
+    private double current;
 
     public AveragePair(double avg, double current) {
         this.avg = avg;

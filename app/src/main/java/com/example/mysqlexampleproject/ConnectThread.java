@@ -18,19 +18,17 @@ import static android.content.ContentValues.TAG;
 
 public class ConnectThread {
     private BluetoothSocket mmSocket;
-    private final BluetoothDevice mmDevice;
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothAdapter mBluetoothAdapter;
     private OutputStream mmOutStream;
     private final int REQUEST_READ_PHONE_STATE = 1;
-    private Boolean deviceConnection;
+    private BluetoothDevice tempDevice;
     private BluetoothDevice connectedDevice;
 
     public ConnectThread(BluetoothDevice device, BluetoothAdapter tempBluetoothAdapter) {
         BluetoothSocket tmp = null;
-        mmDevice = device;
+        tempDevice = device;
         mBluetoothAdapter = tempBluetoothAdapter;
-        deviceConnection = false;
         try {
             tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
         } catch (IOException e) {
@@ -38,7 +36,6 @@ public class ConnectThread {
         }
 
         mmSocket = tmp;
-
     }
 
     public void initiateConnection(Activity activity) {
@@ -53,14 +50,10 @@ public class ConnectThread {
         connectSocket();
     }
 
-    public BluetoothDevice getDevice() {
-        return mmDevice;
-    }
-
-
     public void write(String stringToSend) {
         byte[] b = stringToSend.getBytes();
         try {
+            Log.e(TAG, "OutputStream "+mmOutStream);
             mmOutStream.write(b);
             Log.e(TAG, "Sending Successful. Sending: "+stringToSend);
         } catch (IOException e) {
@@ -76,13 +69,14 @@ public class ConnectThread {
         try {
 
             mmSocket.connect();
-            setConnectedDevice(mmDevice);
-            deviceConnection = true;
+            connectedDevice = tempDevice;
+
             Log.e("ConnectHC05Status", "Connected1");
 
             } catch (IOException connectException) {
 
                 Log.e(TAG, "Unable to connect socket", connectException);
+                connectedDevice = null;
                 try {
                     mmSocket.close();
                 } catch (IOException closeException) {
@@ -92,7 +86,7 @@ public class ConnectThread {
             }
 
 
-        initialiseOutputStream(mmSocket);
+            initialiseOutputStream(mmSocket);
     }
 
     public void initialiseOutputStream(BluetoothSocket socket) {
@@ -116,17 +110,10 @@ public class ConnectThread {
         }
     }
 
-    public Boolean isDeviceConnected() {
-        return deviceConnection;
-    }
+
 
     public BluetoothDevice getConnectedDevice() {
         return connectedDevice;
     }
-
-    public void setConnectedDevice(BluetoothDevice device) {
-        this.connectedDevice = device;
-    }
-
 }
 

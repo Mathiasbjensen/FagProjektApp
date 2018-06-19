@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
+
 @LargeTest
 public class BluetoothTestAndroid {
     private Bluetooth mBluetooth;
@@ -31,8 +32,6 @@ public class BluetoothTestAndroid {
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityRule = new ActivityTestRule<>(MainActivity.class);
-
-
 
     @Before
     public void createBluetooth() {
@@ -42,14 +41,13 @@ public class BluetoothTestAndroid {
     }
 
 
-
     @Test
     public void enableBluetooth() {
         mBluetooth.enableBluetooth(mainActivity);
-        assertThat(mBluetooth.isBluetoothEnabled(),is(true));
+        assertThat(Bluetooth.isBluetoothEnabled(),is(true));
     }
     @Test
-    public void setBluetooth() {
+    public void setBluetoothAdapter() {
         mBluetooth.setBluetoothAdapter(BluetoothAdapter.getDefaultAdapter());
         assertThat(mBluetooth.getBluetoothAdapter(), is(BluetoothAdapter.getDefaultAdapter()));
 
@@ -57,55 +55,13 @@ public class BluetoothTestAndroid {
 
     @Test
     public void checkBluetoothAvailability() {
-        assertThat(Bluetooth.checkBluetoothAvailability(), is(false));
+        assertThat(Bluetooth.checkBluetoothAvailability(), is(true));
     }
 
-    @Test
-    public void getBluetoothAdapter() {
 
-        android.bluetooth.BluetoothAdapter result = BluetoothAdapter.getDefaultAdapter();
-        assertThat(mBluetooth.getBluetoothAdapter(),is(result));
-    }
 
-    @Test
-    public void addToDiscoverList() {
 
-        Set<BluetoothDevice> resultSet = mBluetooth.getBluetoothAdapter().getBondedDevices();
-        for (BluetoothDevice device : resultSet) {
-            mBluetooth.addDiscoveredDeviceList(device);
-        }
-        List<BluetoothDevice> result = new ArrayList<>();
-        result.addAll(resultSet);
-        assertThat(mBluetooth.getDiscoveredDevices(), is(result));
-    }
 
-    @Test
-    public void addToPairedList() {
-
-        Set<BluetoothDevice> resultSet = mBluetooth.getBluetoothAdapter().getBondedDevices();
-        for (BluetoothDevice device : resultSet) {
-            mBluetooth.updatePairedDeviceList(device);
-        }
-        List<BluetoothDevice> result = new ArrayList<>();
-        result.addAll(resultSet);
-        assertThat(mBluetooth.getPairedDevicesList(), is(result));
-    }
-
-    @Test
-    public void updateMap() {
-        Map<String, DevicePair> map1= Collections.emptyMap();
-        for (BluetoothDevice device : mBluetooth.getPairedDevicesList()) {
-            map1.put(device.getName(), new DevicePair(device,"Paired"));
-        }
-        for (BluetoothDevice device : mBluetooth.getDiscoveredDevices()) {
-            map1.put(device.getName(), new DevicePair(device, ""));
-        }
-        Map<String, DevicePair> map2 = Collections.emptyMap();
-        map2 = mBluetooth.updateMap(map2);
-
-        assertThat(map2, is(map1));
-
-    }
 
 
     /*Test

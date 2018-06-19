@@ -127,13 +127,13 @@
             <Spinner
                 android:id="@+id/pamDropDown"
                 android:layout_width="126dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@android:drawable/btn_dropdown"
+                android:background="#66999999"
                 android:dropDownWidth="100dp"
                 android:overlapAnchor="false"
-                android:popupBackground="@android:drawable/btn_default"
+                android:popupBackground="#66999999"
                 android:spinnerMode="dropdown"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewPam" />
@@ -154,23 +154,21 @@
                 android:layout_height="18dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="60dp"
-                android:text="VCL"
+                android:text="VCL 1-100"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pamDropDown" />
 
-            <Spinner
-                android:id="@+id/VCLDropDown"
-                android:layout_width="124dp"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/VCLInput"
+                android:layout_width="126dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:dropDownWidth="100dp"
-                android:overlapAnchor="false"
-                android:popupBackground="@android:drawable/btn_default"
-                android:spinnerMode="dropdown"
+                android:inputType="text"
+                android:background="#66999999"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewVCL" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewVCL"/>
+
 
             <Button
                 android:id="@+id/sendDataVCL"
@@ -189,24 +187,23 @@
                 android:layout_height="23dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="60dp"
-                android:text="FPS"
+                android:text="FPS 1-60"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/VCLDropDown" />
+                app:layout_constraintTop_toBottomOf="@+id/VCLInput" />
 
 
-            <Spinner
-                android:id="@+id/FPSDropDown"
+            <EditText
+                android:id="@+id/FPSInput"
                 android:layout_width="126dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:dropDownWidth="100dp"
-                android:overlapAnchor="false"
-                android:popupBackground="@android:drawable/btn_default"
-                android:spinnerMode="dropdown"
+                android:inputType="text"
+                android:background="#66999999"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewFPS" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewFPS"/>
+
+
 
 
             <Button
@@ -218,6 +215,42 @@
                 android:text="Change"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewFPS" />
+
+            <TextView
+                android:id="@+id/textViewRES"
+                android:layout_width="124dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="60dp"
+                android:text="RES"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/FPSInput" />
+
+
+            <Spinner
+                android:id="@+id/RESDropDown"
+                android:layout_width="126dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:dropDownWidth="100dp"
+                android:overlapAnchor="false"
+                android:background="#66999999"
+                android:popupBackground="#66999999"
+                android:spinnerMode="dropdown"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRES" />
+
+
+            <Button
+                android:id="@+id/sendDataRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="12dp"
+                android:text="Change"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRES" />
 
 
         </android.support.constraint.ConstraintLayout>

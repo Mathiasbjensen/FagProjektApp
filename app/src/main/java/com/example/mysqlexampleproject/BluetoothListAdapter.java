@@ -13,11 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Mathi on 24-04-2018.
- */
 
-public class BluetoothAdapter extends BaseAdapter {
+public class BluetoothListAdapter extends BaseAdapter {
 
     LayoutInflater mInflator;
     Map<String, DevicePair> map;
@@ -25,7 +22,7 @@ public class BluetoothAdapter extends BaseAdapter {
     List<DevicePair> devices;
 
     // Constructor, context = which screen opens it op. Map is essentially a dictionary.
-    public BluetoothAdapter(Context c,Map m){
+    public BluetoothListAdapter(Context c,Map m){
         mInflator = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         map = m;
         names = new ArrayList<>(map.keySet());

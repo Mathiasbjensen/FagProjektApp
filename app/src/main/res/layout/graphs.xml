@@ -4,33 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
-        android:id="@+id/topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/graph1button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="BER" />
-        <Button
-            android:id="@+id/graph2button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="UTI" />
-        <Button
-            android:id="@+id/graph3button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="FPS" />
-
-    </LinearLayout>
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph1"
